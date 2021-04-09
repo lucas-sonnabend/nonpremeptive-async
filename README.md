@@ -26,10 +26,20 @@ poetry run uvicorn example:app
 
 ### Run the health check script
 ```
-./health_checker.sh
+./liveness_probe.sh
 ```
 
-### Simulate a long-running request
+### Simulate a single long running request
 ```
 curl localhost:8000/processing
+```
+
+### Simulate several long running requests
+For example send 10 requests to the `processing` endpoint
+```
+./send_requests.sh 10 processing
+```
+or send 25 requests to the `processing_fixed` endpoint
+```
+./send_requests.sh 25 processing_fixed
 ```
