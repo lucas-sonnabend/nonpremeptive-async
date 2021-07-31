@@ -30,6 +30,15 @@ def _process_request_sync_busy():
     return f"Done counting to {x}"
 
 
+async def _process_request_with_yield():
+    # loop for a long time to simulate intensive load, but also yield in between
+    x = 0
+    for i in range(10 ** 8):
+        x = x + 1
+        if x % 1000 == 0:
+            yield
+    return f"Done counting to {x}"
+
 async def processing(request):
     result = await _process_request_async()
     return PlainTextResponse(result)
@@ -44,6 +53,11 @@ async def processing_fixed(request):
 async def processing_busy(request):
     loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(None, _process_request_sync_busy)
+    return PlainTextResponse(result)
+
+
+def processing_with_yield(_request):
+    result = _process_request_with_yield()
     return PlainTextResponse(result)
 
 
